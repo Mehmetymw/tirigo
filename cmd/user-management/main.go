@@ -21,12 +21,14 @@ func main() {
 	db.AutoMigrate(&domain.User{})
 
 	app := fiber.New()
+	api := app.Group("/api")
+	userRoutes := api.Group("/user")
 
 	userRepo := repository.NewGormUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 
-	userHandler.InitializeRoutes(app)
+	userHandler.InitializeRoutes(userRoutes)
 
 	log.Println("Starting server on :8080")
 	if err := app.Listen(":8080"); err != nil {

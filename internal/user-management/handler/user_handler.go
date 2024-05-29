@@ -44,9 +44,7 @@ func (h *UserHandler) Authenticate(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-func (h *UserHandler) InitializeRoutes(app *fiber.App) {
-	api := app.Group("/api")
-	userRoutes := api.Group("/user")
+func (h *UserHandler) InitializeRoutes(userRoutes fiber.Router) {
 
 	userRoutes.Post("/register", func(c *fiber.Ctx) {
 		h.Register(c)

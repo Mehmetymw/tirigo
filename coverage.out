@@ -1,0 +1,12 @@
+mode: set
+tirigo/internal/user-management/service/user_service.go:17.66,19.2 1 1
+tirigo/internal/user-management/service/user_service.go:21.86,23.16 2 1
+tirigo/internal/user-management/service/user_service.go:23.16,25.3 1 0
+tirigo/internal/user-management/service/user_service.go:27.2,37.16 3 1
+tirigo/internal/user-management/service/user_service.go:37.16,39.3 1 0
+tirigo/internal/user-management/service/user_service.go:41.2,41.21 1 1
+tirigo/internal/user-management/service/user_service.go:44.90,47.16 2 1
+tirigo/internal/user-management/service/user_service.go:47.16,49.3 1 0
+tirigo/internal/user-management/service/user_service.go:51.2,52.16 2 1
+tirigo/internal/user-management/service/user_service.go:52.16,54.3 1 0
+tirigo/internal/user-management/service/user_service.go:56.2,56.18 1 1
