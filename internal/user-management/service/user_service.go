@@ -5,6 +5,8 @@ import (
 	"tirigo/internal/user-management/domain"
 	"tirigo/internal/user-management/dtos"
 	"tirigo/internal/user-management/repository"
+	"tirigo/pkg/jwt"
+	"tirigo/pkg/redis"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -41,17 +43,34 @@ func (s *UserService) Register(user dtos.UserRegisterParameter) (domain.User, er
 	return newUser, nil
 }
 
-func (s *UserService) Authenticate(userInfo dtos.UserAuthParameter) (domain.User, error) {
+func (s *UserService) Authenticate(userInfo dtos.UserAuthParameter) (string, error) {
 
 	user, err := s.repo.FindByUsername(userInfo.Username)
 	if err != nil {
-		return domain.User{}, err
+		return "", err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userInfo.Password))
 	if err != nil {
-		return domain.User{}, err
+		return "", err
 	}
 
-	return user, nil
+	token, err := jwt.GenerateToken(user.Username)
+	if err != nil {
+		return "", err
+	}
+
+	err = redis.Client.Set(token, user.Username, time.Hour*72).Err()
+	if err != nil {
+		return "", err
+	}
+	return token, nil
+}
+
+func (s *UserService) Logout(token string) error {
+	err := redis.Client.Del(token).Err()
+	if err != nil {
+		return err
+	}
+	return nil
 }

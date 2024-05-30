@@ -44,6 +44,20 @@ func (h *UserHandler) Authenticate(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
+func (h *UserHandler) Logout(c *fiber.Ctx) error {
+	token := c.Get("Authorization")
+	if token == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "missing token"})
+	}
+	err := h.service.Logout(token)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "logged out"})
+}
+
 func (h *UserHandler) InitializeRoutes(userRoutes fiber.Router) {
 
 	userRoutes.Post("/register", func(c *fiber.Ctx) {
@@ -52,4 +66,9 @@ func (h *UserHandler) InitializeRoutes(userRoutes fiber.Router) {
 	userRoutes.Post("/login", func(c *fiber.Ctx) {
 		h.Authenticate(c)
 	})
+
+	userRoutes.Post("/logout", func(c *fiber.Ctx) {
+		h.Logout(c)
+	})
+
 }

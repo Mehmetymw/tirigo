@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Database() *gorm.DB {
+func InitDatabase() *gorm.DB {
 	dsn := os.Getenv("USER_DATABASE")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

@@ -2,31 +2,37 @@ package main
 
 import (
 	"log"
+	"tirigo/internal/user-management/config"
 	"tirigo/internal/user-management/domain"
 	"tirigo/internal/user-management/handler"
 	"tirigo/internal/user-management/repository"
 	"tirigo/internal/user-management/service"
-	"tirigo/pkg/config"
+	mainconfig "tirigo/pkg/config"
+	"tirigo/pkg/jwt"
+	"tirigo/pkg/redis"
 
 	"github.com/gofiber/fiber"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("couldn't load config: %v", err)
 	}
 
-	db := config.Database()
-	db.AutoMigrate(&domain.User{})
+	redis.Init(cfg.RedisAddr)
+	jwt.Init(cfg.JWTSecret)
 
-	app := fiber.New()
-	api := app.Group("/api")
-	userRoutes := api.Group("/user")
+	db := mainconfig.InitDatabase()
+	db.AutoMigrate(&domain.User{})
 
 	userRepo := repository.NewGormUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
+
+	app := fiber.New()
+	api := app.Group("/api")
+	userRoutes := api.Group("/user")
 
 	userHandler.InitializeRoutes(userRoutes)
 
