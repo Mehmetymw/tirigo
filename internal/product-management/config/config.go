@@ -7,9 +7,9 @@ import (
 )
 
 type Config struct {
-	DBUrl     string
-	RedisAddr string
-	JWTSecret string
+	DBUrl       string
+	RedisAddr   string
+	RabbitMQUrl string
 }
 
 func LoadConfig() (*Config, error) {
@@ -19,9 +19,9 @@ func LoadConfig() (*Config, error) {
 	}
 
 	config := &Config{
-		DBUrl:     os.Getenv("DB_URL"),
-		RedisAddr: os.Getenv("REDIS_ADDR"),
-		JWTSecret: os.Getenv("JWT_SECRET"),
+		DBUrl:       os.Getenv("DB_URL"),
+		RedisAddr:   os.Getenv("REDIS_ADDR"),
+		RabbitMQUrl: os.Getenv("RABBITMQ_URL"),
 	}
 
 	return config, nil

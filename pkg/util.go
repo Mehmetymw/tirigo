@@ -3,6 +3,8 @@ package util
 import (
 	"math/rand"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -28,4 +30,7 @@ func RandomPassword() string {
 }
 func RandomEmail() string {
 	return RandomString(8) + "@example.com"
+}
+func RandomID() string {
+	return uuid.NewString()
 }

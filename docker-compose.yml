@@ -8,7 +8,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - USER_DATABASE=postgres://user:password@db:5432/tirigo?sslmode=disable
+      - DB_URL=postgres://user:password@db:5432/tirigo?sslmode=disable
       - REDIS_ADDR=redis:6379
       - JWT_SECRET=my_secret_key
     depends_on:
